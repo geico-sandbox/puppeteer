@@ -5,6 +5,7 @@
  */
 
 import expect from 'expect';
+import type {Issue} from 'puppeteer';
 import type {
   WebMCPTool,
   WebMCPToolCall,
@@ -12,6 +13,7 @@ import type {
 } from 'puppeteer-core/internal/cdp/WebMCP.js';
 
 import {setupSeparateTestBrowserHooks} from '../mocha-utils.js';
+import {html, waitEvent} from '../utils.js';
 
 describe('Page.webmcp', function () {
   const state = setupSeparateTestBrowserHooks({
@@ -47,8 +49,10 @@ describe('Page.webmcp', function () {
           },
           required: ['text'],
         },
-        execute: () => {},
-        annotations: {readOnlyHint: true},
+        execute: (params: {text: string}) => {
+          return params.text;
+        },
+        annotations: {readOnlyHint: true, untrustedContentHint: true},
       });
     });
     // Register a declarative WebMCP tool.
@@ -56,6 +60,7 @@ describe('Page.webmcp', function () {
       const form = document.createElement('form');
       form.setAttribute('toolname', 'declarative tool name');
       form.setAttribute('tooldescription', 'tool description');
+      form.setAttribute('toolautosubmit', '');
       (window as any).document.body.appendChild(form);
     });
 
@@ -75,6 +80,7 @@ describe('Page.webmcp', function () {
     });
     expect(tools[0]!.annotations).toBeDefined();
     expect(tools[0]!.annotations!.readOnly).toBe(true);
+    expect(tools[0]!.annotations!.untrustedContent).toBe(true);
     expect(tools[0]!.frame).toBe(page.mainFrame());
     expect(await tools[0]!.formElement).toBeUndefined();
     expect(tools[0]!.location).toBeDefined();
@@ -82,7 +88,8 @@ describe('Page.webmcp', function () {
     expect(tools[1]!.name).toBe('declarative tool name');
     expect(tools[1]!.description).toBe('tool description');
     expect(tools[1]!.inputSchema).toStrictEqual({});
-    expect(tools[1]!.annotations).toBeUndefined();
+    expect(tools[1]!.annotations).toBeDefined();
+    expect(tools[1]!.annotations!.autosubmit).toBe(true);
     expect(tools[1]!.frame).toBe(page.mainFrame());
     expect(await tools[1]!.formElement).toBeDefined();
     expect(tools[1]!.location).toBeUndefined();
@@ -132,12 +139,6 @@ describe('Page.webmcp', function () {
     expect(await addedTools[0]!.formElement).toBeUndefined();
     expect(addedTools[0]!.location).toBeDefined();
 
-    const declarativeToolAdded = new Promise<WebMCPTool[]>(resolve => {
-      page.webmcp.once('toolsadded', event => {
-        return resolve(event.tools);
-      });
-    });
-
     // Register a declarative WebMCP tool.
     await page.evaluate(() => {
       const form = document.createElement('form');
@@ -146,12 +147,22 @@ describe('Page.webmcp', function () {
       (window as any).document.body.appendChild(form);
     });
 
+    const declarativeToolAdded = new Promise<WebMCPTool[]>(resolve => {
+      page.webmcp.once('toolsadded', event => {
+        return resolve(event.tools);
+      });
+    });
+
     addedTools = await declarativeToolAdded;
     expect(addedTools.length).toBe(1);
     expect(addedTools[0]!.name).toBe('declarative tool name');
     expect(addedTools[0]!.description).toBe('tool description');
     expect(addedTools[0]!.annotations).toBeUndefined();
-    expect(addedTools[0]!.inputSchema).toStrictEqual({});
+    expect(addedTools[0]!.inputSchema).toStrictEqual({
+      type: 'object',
+      properties: {},
+      required: [],
+    });
     expect(addedTools[0]!.frame).toBe(page.mainFrame());
     expect(await addedTools[0]!.formElement).toBeDefined();
     expect(addedTools[0]!.location).toBeUndefined();
@@ -184,14 +195,6 @@ describe('Page.webmcp', function () {
       return controller;
     });
 
-    // Register a declarative WebMCP tool.
-    await page.evaluate(() => {
-      const form = document.createElement('form');
-      form.setAttribute('toolname', 'declarative tool name');
-      form.setAttribute('tooldescription', 'tool description');
-      (window as any).document.body.appendChild(form);
-    });
-
     const imperativeToolRemoved = new Promise<WebMCPTool[]>(resolve => {
       page.webmcp.once('toolsremoved', event => {
         return resolve(event.tools);
@@ -220,6 +223,20 @@ describe('Page.webmcp', function () {
     expect(await removedTools[0]!.formElement).toBeUndefined();
     expect(removedTools[0]!.location).toBeDefined();
 
+    // Register a declarative WebMCP tool.
+    await page.evaluate(() => {
+      const form = document.createElement('form');
+      form.setAttribute('toolname', 'declarative tool name');
+      form.setAttribute('tooldescription', 'tool description');
+      (window as any).document.body.appendChild(form);
+    });
+
+    await new Promise<WebMCPTool[]>(resolve => {
+      page.webmcp.once('toolsadded', event => {
+        return resolve(event.tools);
+      });
+    });
+
     const declarativeToolRemoved = new Promise<WebMCPTool[]>(resolve => {
       page.webmcp.once('toolsremoved', event => {
         return resolve(event.tools);
@@ -235,7 +252,11 @@ describe('Page.webmcp', function () {
     expect(removedTools.length).toBe(1);
     expect(removedTools[0]!.name).toBe('declarative tool name');
     expect(removedTools[0]!.description).toBe('tool description');
-    expect(removedTools[0]!.inputSchema).toStrictEqual({});
+    expect(removedTools[0]!.inputSchema).toStrictEqual({
+      type: 'object',
+      properties: {},
+      required: [],
+    });
     expect(removedTools[0]!.annotations).toBeUndefined();
     expect(removedTools[0]!.frame).toBe(page.mainFrame());
     expect(await removedTools[0]!.formElement).toBeDefined();
@@ -367,8 +388,8 @@ describe('Page.webmcp', function () {
           },
           required: ['text'],
         },
-        execute: () => {
-          return 'hello world';
+        execute: (params: {text: string}) => {
+          return `hello ${params.text}`;
         },
       });
     });
@@ -385,7 +406,7 @@ describe('Page.webmcp', function () {
     await page.evaluate(() => {
       (window as any).navigator.modelContextTesting.executeTool(
         'test-tool-1',
-        JSON.stringify({text: 'test'}),
+        JSON.stringify({text: 'world'}),
       );
     });
 
@@ -394,7 +415,7 @@ describe('Page.webmcp', function () {
 
     expect(response.id).toBe(call.id);
     expect(response.call).toBe(call);
-    expect(response.status).toBe('Success');
+    expect(response.status).toBe('Completed');
     expect(response.output).toBe('hello world');
     expect(response.errorText).toBeUndefined();
     expect(response.exception).toBeUndefined();
@@ -487,5 +508,71 @@ describe('Page.webmcp', function () {
     expect(response.output).toBeUndefined();
     expect(response.errorText).toBe('Tool not found: unknown-tool-name');
     expect(response.exception).toBeUndefined();
+  });
+
+  it('should invoke tool', async () => {
+    const {page, httpsServer} = state;
+    await page.goto(httpsServer.EMPTY_PAGE);
+
+    expect(page.webmcp).toBeDefined();
+
+    const toolAddedPromise = new Promise<any>(resolve => {
+      page.webmcp.on('toolsadded', resolve);
+    });
+
+    // Register an imperative WebMCP tool.
+    await page.evaluate(() => {
+      (window as any).navigator.modelContext.registerTool({
+        name: 'test-tool-1',
+        description: 'A test tool 1',
+        inputSchema: {
+          type: 'object',
+          properties: {
+            text: {type: 'string', description: 'Some text'},
+          },
+          required: ['text'],
+        },
+        execute: (params: {text: string}) => {
+          return `hello ${params.text}`;
+        },
+      });
+    });
+
+    await toolAddedPromise;
+
+    const [tool] = page.webmcp.tools();
+
+    const toolCalled = new Promise<WebMCPToolCall>(resolve => {
+      page.webmcp.once('toolinvoked', resolve);
+    });
+
+    // Invoke WebMCP tool.
+    const response = await tool!.execute({text: 'world'});
+
+    const call = await toolCalled;
+
+    expect(response.id).toBe(call.id);
+    expect(response.call).toBe(call);
+    expect(response.status).toBe('Completed');
+    expect(response.output).toBe('hello world');
+    expect(response.errorText).toBeUndefined();
+    expect(response.exception).toBeUndefined();
+  });
+
+  it('should emit issue event from WebMCP form missing tooldescription', async () => {
+    const {page, httpsServer} = state;
+    await page.goto(httpsServer.EMPTY_PAGE);
+
+    const issuePromise = waitEvent<Issue>(page, 'issue');
+
+    await page.setContent(html`<form toolname="mytool"></form>`);
+
+    const issue = await issuePromise;
+    expect(issue).toBeTruthy();
+    expect(issue.code).toBe('GenericIssue');
+    expect(issue.details.genericIssueDetails).toBeTruthy();
+    expect(issue.details.genericIssueDetails!.errorType).toBe(
+      'FormModelContextMissingToolDescription',
+    );
   });
 });

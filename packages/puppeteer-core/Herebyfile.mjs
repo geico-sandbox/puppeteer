@@ -18,7 +18,7 @@ export const updateVersionTask = task({
   name: 'update:version',
   run: async () => {
     // x-release-please-start-version
-    const version = '24.40.0';
+    const version = '24.42.0';
     // x-release-please-end
 
     // We only want to do this once we are trying to publish
@@ -141,6 +141,15 @@ export const buildTask = task({
               path.join(
                 path.dirname(require.resolve('parsel-js')),
                 '..',
+                'LICENSE',
+              ),
+              'utf-8',
+            );
+            break;
+          case 'urlpattern-polyfill':
+            license = await readFile(
+              path.join(
+                path.dirname(require.resolve('urlpattern-polyfill')),
                 'LICENSE',
               ),
               'utf-8',

@@ -116,6 +116,7 @@ import {
   NodeLocator,
   type AwaitedLocator,
 } from './locators/locators.js';
+import type {Realm} from './Realm.js';
 import type {Target} from './Target.js';
 import type {WebWorker} from './WebWorker.js';
 
@@ -956,7 +957,6 @@ export abstract class Page extends EventEmitter<PageEvents> {
    * Experimental API for {@link https://github.com/webmachinelearning/webmcp
    * | WebMCP}. Requires Chrome 149+ with the
    * `--enable-features=WebMCPTesting,DevToolsWebMCPSupport` flags enabled.
-   * Supports tool discovery only; invocation is currently unsupported.
    *
    * @experimental
    */
@@ -3233,8 +3233,8 @@ export abstract class Page extends EventEmitter<PageEvents> {
   }
 
   /**
-   * Opens DevTools for the current Page and returns the DevTools Page. This
-   * method is only available in Chrome.
+   * Opens DevTools for the this page if not already open and returns the DevTools page.
+   * This method is only available in Chrome.
    */
   abstract openDevTools(): Promise<Page>;
 
@@ -3252,12 +3252,23 @@ export abstract class Page extends EventEmitter<PageEvents> {
   abstract get bluetooth(): BluetoothEmulation;
 
   /**
-   * Triggers an extension action for the given extension.
+   * Triggers the default action of the specified extension for this page.
+   * This simulates clicking the extension's icon in the browser's toolbar.
    *
-   * @param extension - The extension to trigger the action for.
+   * @param extension - The {@link Extension} whose action to trigger.
    * @public
    */
   abstract triggerExtensionAction(extension: Extension): Promise<void>;
+
+  /**
+   * Retrieves the list of extension execution realms in the main frame of the page.
+   * These realms correspond to extension content scripts running on the page.
+   *
+   * Shortcut for {@link Frame.extensionRealms | mainFrame().extensionRealms()}.
+   *
+   * @public
+   */
+  abstract extensionRealms(): Realm[];
 }
 
 /**

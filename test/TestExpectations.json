@@ -133,6 +133,20 @@
     "comment": "TODO: add a comment explaining why this expectation is required (include links to issues)"
   },
   {
+    "testIdPattern": "[network_restrictions.spec] *",
+    "platforms": ["darwin", "linux", "win32"],
+    "parameters": ["firefox"],
+    "expectations": ["SKIP"],
+    "comment": "CDP-specific feature, not supported in Firefox"
+  },
+  {
+    "testIdPattern": "[network_restrictions.spec] *",
+    "platforms": ["darwin", "linux", "win32"],
+    "parameters": ["webDriverBiDi"],
+    "expectations": ["SKIP"],
+    "comment": "CDP-specific feature, not supported in WebDriver BiDi"
+  },
+  {
     "testIdPattern": "[network.spec] network Page.setBypassServiceWorker *",
     "platforms": ["darwin", "linux", "win32"],
     "parameters": ["firefox"],
@@ -180,6 +194,20 @@
     "parameters": ["firefox"],
     "expectations": ["SKIP"],
     "comment": "Chrome-specific test"
+  },
+  {
+    "testIdPattern": "[realms.spec] *",
+    "platforms": ["darwin", "linux", "win32"],
+    "parameters": ["webDriverBiDi"],
+    "expectations": ["SKIP"],
+    "comment": "No extensions in WebDriver BiDi so far"
+  },
+  {
+    "testIdPattern": "[realms.spec] *",
+    "platforms": ["darwin", "linux", "win32"],
+    "parameters": ["chrome-headless-shell"],
+    "expectations": ["SKIP"],
+    "comment": "no extension api for chrome-headless-shell"
   },
   {
     "testIdPattern": "[screencast.spec] *",
@@ -453,13 +481,6 @@
     "comment": "shell always emulates a focused page"
   },
   {
-    "testIdPattern": "[emulation.spec] Emulation Page.emulateNetworkConditions should support offline",
-    "platforms": ["darwin", "linux", "win32"],
-    "parameters": ["firefox"],
-    "expectations": ["FAIL"],
-    "comment": "Not supported by WebDriver BiDi"
-  },
-  {
     "testIdPattern": "[evaluation.spec] Evaluation specs Page.evaluate should replace symbols with undefined",
     "platforms": ["darwin", "linux", "win32"],
     "parameters": ["cdp"],
@@ -598,6 +619,20 @@
     "parameters": ["webDriverBiDi"],
     "expectations": ["FAIL"],
     "comment": "TODO: add a comment explaining why this expectation is required (include links to issues)"
+  },
+  {
+    "testIdPattern": "[network_restrictions.spec] Network Restrictions should detach from targets violating blocklist when connecting to a running browser",
+    "platforms": ["darwin", "linux", "win32"],
+    "parameters": ["pipe"],
+    "expectations": ["SKIP"],
+    "comment": "Verifies URL blocklist enforcement when connecting to a browser via WebSocket, which is not applicable for pipe mode"
+  },
+  {
+    "testIdPattern": "[network_restrictions.spec] Network Restrictions should not block chrome://version/ even if it matches blocklist",
+    "platforms": ["darwin", "linux", "win32"],
+    "parameters": ["chrome-headless-shell"],
+    "expectations": ["SKIP"],
+    "comment": "chrome:// urls are not supported by chrome-headless-shell"
   },
   {
     "testIdPattern": "[network.spec] network Network Events should support redirects",
@@ -1040,11 +1075,11 @@
     "comment": "https://bugzilla.mozilla.org/show_bug.cgi?id=1862018 - Requires multiple session support"
   },
   {
-    "testIdPattern": "[console.spec] console should work for different console API calls with timing functions",
+    "testIdPattern": "[console.spec] console should work for different console API calls with group functions",
     "platforms": ["darwin", "linux", "win32"],
     "parameters": ["firefox", "webDriverBiDi"],
     "expectations": ["FAIL"],
-    "comment": "https://bugzilla.mozilla.org/show_bug.cgi?id=1866749"
+    "comment": "Failing since 150.0 due to https://bugzilla.mozilla.org/show_bug.cgi?id=1866749, reported as https://github.com/w3c/webdriver-bidi/issues/1097"
   },
   {
     "testIdPattern": "[cookies.spec] Cookie specs Page.setCookie should default to setting secure cookie for HTTPS websites",
@@ -1206,6 +1241,13 @@
     "parameters": ["chrome", "pipe"],
     "expectations": ["SKIP"],
     "comment": "We can't connect to a browser started with pipe:true"
+  },
+  {
+    "testIdPattern": "[fixtures.spec] Fixtures should dump browser process stderr",
+    "platforms": ["win32"],
+    "parameters": ["firefox", "webDriverBiDi"],
+    "expectations": ["SKIP"],
+    "comment": "See https://github.com/puppeteer/puppeteer/issues/14774"
   },
   {
     "testIdPattern": "[frame.spec] Frame specs Frame Management should support framesets",
@@ -1388,6 +1430,20 @@
     "parameters": ["firefox", "webDriverBiDi"],
     "expectations": ["FAIL"],
     "comment": "https://bugzilla.mozilla.org/show_bug.cgi?id=1908952#c4 historyUpdated from beforeunload incorrectly comes before navigationStarted"
+  },
+  {
+    "testIdPattern": "[network_restrictions.spec] Network Restrictions should only allow navigation to URLs in the allowlist",
+    "platforms": ["darwin", "linux", "win32"],
+    "parameters": ["cdp", "chrome"],
+    "expectations": ["FAIL"],
+    "comment": "allowlist option requires at least chrome 149 version"
+  },
+  {
+    "testIdPattern": "[network_restrictions.spec] Network Restrictions should throw an error for an invalid pattern",
+    "platforms": ["win32"],
+    "parameters": ["cdp", "chrome"],
+    "expectations": ["SKIP"],
+    "comment": "Newly added flaky test, see https://github.com/puppeteer/puppeteer/issues/14919"
   },
   {
     "testIdPattern": "[network.spec] network Network Events Page.Events.Request",
@@ -1586,20 +1642,6 @@
     "parameters": ["firefox", "webDriverBiDi"],
     "expectations": ["FAIL"],
     "comment": "Unknown command emulation.setScriptingEnabled"
-  },
-  {
-    "testIdPattern": "[page.spec] Page Page.setOfflineMode should emulate navigator.onLine",
-    "platforms": ["darwin", "linux", "win32"],
-    "parameters": ["firefox", "webDriverBiDi"],
-    "expectations": ["FAIL"],
-    "comment": "Not supported by WebDriver BiDi"
-  },
-  {
-    "testIdPattern": "[page.spec] Page Page.setOfflineMode should work",
-    "platforms": ["darwin", "linux", "win32"],
-    "parameters": ["firefox", "webDriverBiDi"],
-    "expectations": ["FAIL"],
-    "comment": "Not supported by WebDriver BiDi"
   },
   {
     "testIdPattern": "[page.spec] Page Page.setUserAgent should work with additional userAgentMetdata",
@@ -1887,13 +1929,19 @@
     "comment": "Experimental support for WebMCP is not supported in BiDi"
   },
   {
-    "testIdPattern": "[webmcp.spec] Page.webmcp should fire toolsadded events",
+    "testIdPattern": "[webmcp.spec] Page.webmcp should fire toolinvoked events",
     "platforms": ["darwin", "linux", "win32"],
     "parameters": ["cdp", "chrome"],
     "expectations": ["PASS"]
   },
   {
-    "testIdPattern": "[webmcp.spec] Page.webmcp should fire toolsremoved events",
+    "testIdPattern": "[webmcp.spec] Page.webmcp should fire toolresponded event with errorText",
+    "platforms": ["darwin", "linux", "win32"],
+    "parameters": ["cdp", "chrome"],
+    "expectations": ["PASS"]
+  },
+  {
+    "testIdPattern": "[webmcp.spec] Page.webmcp should fire toolresponded event with exception",
     "platforms": ["darwin", "linux", "win32"],
     "parameters": ["cdp", "chrome"],
     "expectations": ["PASS"]
@@ -1937,6 +1985,13 @@
     "parameters": ["cdp", "chrome", "chrome-headless-shell"],
     "expectations": ["FAIL"],
     "comment": "TODO: started to fail with Chrome headless shell 135 on Windows"
+  },
+  {
+    "testIdPattern": "[network_restrictions.spec] Network Restrictions should only allow navigation to URLs in the allowlist",
+    "platforms": ["linux"],
+    "parameters": ["chrome", "headless", "webDriverBiDiOnly"],
+    "expectations": ["SKIP"],
+    "comment": "allowlist option requires at least chrome 149 version"
   },
   {
     "testIdPattern": "[network.spec] network Network Events Page.Events.Request",

@@ -71,6 +71,8 @@ export class CdpBrowser extends BrowserBase {
     networkEnabled = true,
     issuesEnabled = true,
     handleDevToolsAsPage = false,
+    blocklist?: string[],
+    allowlist?: string[],
   ): Promise<CdpBrowser> {
     const browser = new CdpBrowser(
       connection,
@@ -84,7 +86,20 @@ export class CdpBrowser extends BrowserBase {
       networkEnabled,
       issuesEnabled,
       handleDevToolsAsPage,
+      blocklist,
+      allowlist,
     );
+
+    if (allowlist) {
+      const version = await browser.#getVersion();
+      const majorVersion = parseInt(
+        version.product.match(/\d+/)?.[0] ?? '0',
+        10,
+      );
+      if (majorVersion < 149) {
+        throw new Error('The allowlist option require Chrome 149 or greater.');
+      }
+    }
     if (acceptInsecureCerts) {
       await connection.send('Security.setIgnoreCertificateErrors', {
         ignore: true,
@@ -119,6 +134,8 @@ export class CdpBrowser extends BrowserBase {
     networkEnabled = true,
     issuesEnabled = true,
     handleDevToolsAsPage = false,
+    blocklist?: string[],
+    allowlist?: string[],
   ) {
     super();
     this.#networkEnabled = networkEnabled;
@@ -139,6 +156,8 @@ export class CdpBrowser extends BrowserBase {
       this.#createTarget,
       this.#targetFilterCallback,
       waitForInitiallyDiscoveredTargets,
+      blocklist,
+      allowlist,
     );
     this.#defaultContext = new CdpBrowserContext(this.#connection, this);
     for (const contextId of contextIds) {
@@ -416,12 +435,16 @@ export class CdpBrowser extends BrowserBase {
         targetId: pageTargetId,
       },
     );
+    return await this._getDevToolsTargetPage(openDevToolsResponse.targetId);
+  }
+
+  async _getDevToolsTargetPage(devtoolsTargetId: string): Promise<Page> {
     const target = (await this.waitForTarget(t => {
-      return (t as CdpTarget)._targetId === openDevToolsResponse.targetId;
+      return (t as CdpTarget)._targetId === devtoolsTargetId;
     })) as CdpTarget;
     if (!target) {
       throw new Error(
-        `Missing target for DevTools page (id = ${pageTargetId})`,
+        `Missing target for DevTools page (id = ${devtoolsTargetId})`,
       );
     }
     const initialized =
@@ -429,13 +452,13 @@ export class CdpBrowser extends BrowserBase {
       InitializationStatus.SUCCESS;
     if (!initialized) {
       throw new Error(
-        `Failed to create target for DevTools page (id = ${pageTargetId})`,
+        `Failed to create target for DevTools page (id = ${devtoolsTargetId})`,
       );
     }
     const page = await target.page();
     if (!page) {
       throw new Error(
-        `Failed to create a DevTools Page for target (id = ${pageTargetId})`,
+        `Failed to create a DevTools Page for target (id = ${devtoolsTargetId})`,
       );
     }
     return page;
@@ -456,6 +479,31 @@ export class CdpBrowser extends BrowserBase {
 
   override async uninstallExtension(id: string): Promise<void> {
     await this.#connection.send('Extensions.uninstall', {id});
+
+    // Currently sending the Extensions.uninstall command does not trigger
+    // the Target.targetDestroyed event for service workers. This causes
+    // flakiness in the extension tests.
+    // TODO(nroscino): Remove this once the event is correctly emitted.
+    const targetDestroyedPromises = [];
+    for (const [targetId, targetInfo] of this._targetManager()
+      .getDiscoveredTargetInfos()
+      .entries()) {
+      if (targetInfo.url.includes(id) && targetInfo.type === 'service_worker') {
+        this._targetManager().addToIgnoreTarget(targetId);
+        targetDestroyedPromises.push(
+          new Promise(resolve => {
+            return setTimeout(() => {
+              this.#connection.emit('Target.targetDestroyed', {
+                targetId: targetId,
+              });
+              resolve(null);
+            }, 0);
+          }),
+        );
+      }
+    }
+    await Promise.all(targetDestroyedPromises);
+
     this.#extensions.delete(id);
   }
 
@@ -579,6 +627,8 @@ export class CdpBrowser extends BrowserBase {
           currExtension.id,
           currExtension.version,
           currExtension.name,
+          currExtension.path,
+          currExtension.enabled,
           this,
         );
 

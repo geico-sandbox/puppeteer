@@ -251,7 +251,7 @@ The constructor for this class is marked as internal. Third-party code should no
 
 </td><td>
 
-**_(Experimental)_** Experimental API for [WebMCP](https://github.com/webmachinelearning/webmcp). Requires Chrome 149+ with the `--enable-features=WebMCPTesting,DevToolsWebMCPSupport` flags enabled. Supports tool discovery only; invocation is currently unsupported.
+**_(Experimental)_** Experimental API for [WebMCP](https://github.com/webmachinelearning/webmcp). Requires Chrome 149+ with the `--enable-features=WebMCPTesting,DevToolsWebMCPSupport` flags enabled.
 
 </td></tr>
 </tbody></table>
@@ -710,6 +710,19 @@ Functions installed via `page.exposeFunction` survive navigations.
 </td></tr>
 <tr><td>
 
+<span id="extensionrealms">[extensionRealms()](./puppeteer.page.extensionrealms.md)</span>
+
+</td><td>
+
+</td><td>
+
+Retrieves the list of extension execution realms in the main frame of the page. These realms correspond to extension content scripts running on the page.
+
+Shortcut for [mainFrame().extensionRealms()](./puppeteer.frame.extensionrealms.md).
+
+</td></tr>
+<tr><td>
+
 <span id="focus">[focus(selector)](./puppeteer.page.focus.md)</span>
 
 </td><td>
@@ -933,7 +946,7 @@ All timestamps are in monotonic time: monotonically increasing time in seconds s
 
 </td><td>
 
-Opens DevTools for the current Page and returns the DevTools Page. This method is only available in Chrome.
+Opens DevTools for the this page if not already open and returns the DevTools page. This method is only available in Chrome.
 
 </td></tr>
 <tr><td>
@@ -1351,7 +1364,7 @@ Shortcut for [page.mainFrame().title()](./puppeteer.frame.title.md).
 
 </td><td>
 
-Triggers an extension action for the given extension.
+Triggers the default action of the specified extension for this page. This simulates clicking the extension's icon in the browser's toolbar.
 
 </td></tr>
 <tr><td>

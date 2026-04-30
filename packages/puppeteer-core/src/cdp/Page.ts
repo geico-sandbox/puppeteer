@@ -59,6 +59,7 @@ import {
 } from '../common/util.js';
 import type {Viewport} from '../common/Viewport.js';
 import {environment} from '../environment.js';
+import type {Realm} from '../index-browser.js';
 import {assert} from '../util/assert.js';
 import {Deferred} from '../util/Deferred.js';
 import {AsyncDisposableStack} from '../util/disposable.js';
@@ -472,6 +473,12 @@ export class CdpPage extends Page {
   override async openDevTools(): Promise<Page> {
     const pageTargetId = this.target()._targetId;
     const browser = this.browser() as CdpBrowser;
+    const devtoolsTargetId = await browser._hasDevToolsTarget(
+      this.target()._targetId,
+    );
+    if (devtoolsTargetId) {
+      return await browser._getDevToolsTargetPage(devtoolsTargetId);
+    }
     const devtoolsPage = await browser._createDevToolsPage(pageTargetId);
     return devtoolsPage;
   }
@@ -1320,6 +1327,10 @@ export class CdpPage extends Page {
 
   override get bluetooth(): BluetoothEmulation {
     return this.#cdpBluetoothEmulation;
+  }
+
+  override extensionRealms(): Realm[] {
+    return this.mainFrame().extensionRealms();
   }
 }
 
