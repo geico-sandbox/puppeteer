@@ -2,6 +2,133 @@
 
 Combined changelog for puppeteer and puppeteer-core.
 
+## [25.0.2](https://github.com/puppeteer/puppeteer/compare/puppeteer-v25.0.1...puppeteer-v25.0.2) (2026-05-15)
+
+
+### ♻️ Chores
+
+* **puppeteer:** Synchronize puppeteer versions
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @puppeteer/browsers bumped from 3.0.1 to 3.0.2
+
+
+### 🛠️ Fixes
+
+* update docs text ([#14992](https://github.com/puppeteer/puppeteer/issues/14992)) ([36527b8](https://github.com/puppeteer/puppeteer/commit/36527b8b9dd856e11a372b46cba23409e5613573))
+
+
+## [25.0.1](https://github.com/puppeteer/puppeteer/compare/puppeteer-v25.0.0...puppeteer-v25.0.1) (2026-05-13)
+
+
+### ♻️ Chores
+
+* **puppeteer:** Synchronize puppeteer versions
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @puppeteer/browsers bumped from 3.0.0 to 3.0.1
+
+
+### 🛠️ Fixes
+
+* enabled features should take precedence over disabled features ([#14985](https://github.com/puppeteer/puppeteer/issues/14985)) ([f6fd7c2](https://github.com/puppeteer/puppeteer/commit/f6fd7c29f92e6183b2fd48f0571957306c58d440))
+* roll to Chrome 148.0.7778.167 ([#14980](https://github.com/puppeteer/puppeteer/issues/14980)) ([84c46fe](https://github.com/puppeteer/puppeteer/commit/84c46fede6b02a1e9a00104b97b28c263f0c84df))
+* roll to Firefox 150.0.3 ([#14983](https://github.com/puppeteer/puppeteer/issues/14983)) ([872f778](https://github.com/puppeteer/puppeteer/commit/872f77822d6b6b9b6510752d838107a967241bdb))
+
+
+## [25.0.0](https://github.com/puppeteer/puppeteer/compare/puppeteer-v24.43.1...puppeteer-v25.0.0) (2026-05-12)
+
+
+### ⚠ BREAKING CHANGES
+
+* remove deprecated Puppeteer.product ([#14977](https://github.com/puppeteer/puppeteer/issues/14977))
+* bump min NodeJS to 22 ([#14973](https://github.com/puppeteer/puppeteer/issues/14973))
+* return a Promise for executablePath, defaultArgs ([#14965](https://github.com/puppeteer/puppeteer/issues/14965))
+* remove deprecated MouseOptions.clickCount ([#13865](https://github.com/puppeteer/puppeteer/issues/13865))
+* update min version - Node v20.19 and Typescript v5.0.1 ([#14364](https://github.com/puppeteer/puppeteer/issues/14364))
+* remove deprecated Browser.isConnected() ([#14910](https://github.com/puppeteer/puppeteer/issues/14910))
+* move packages to ESM only ([#14355](https://github.com/puppeteer/puppeteer/issues/14355))
+* **puppeteer-core:** Remove Cookie attribute sameParty ([#14545](https://github.com/puppeteer/puppeteer/issues/14545))
+* normalize newline-separated headers to comma-separated format ([#14492](https://github.com/puppeteer/puppeteer/issues/14492))
+
+
+### 🎉 Features
+
+* move packages to ESM only ([#14355](https://github.com/puppeteer/puppeteer/issues/14355)) ([4c22177](https://github.com/puppeteer/puppeteer/commit/4c22177a7dcbd5a5fe6922eec75351bb56cd0336))
+
+
+### 📄 Documentation
+
+* bump min NodeJS to 22 ([#14973](https://github.com/puppeteer/puppeteer/issues/14973)) ([4b6ddc3](https://github.com/puppeteer/puppeteer/commit/4b6ddc3a2631518651187b7795e36fae9a976121))
+* update min version - Node v20.19 and Typescript v5.0.1 ([#14364](https://github.com/puppeteer/puppeteer/issues/14364)) ([96f3780](https://github.com/puppeteer/puppeteer/commit/96f3780289d42557b648a18d806843a28da7e2f5))
+
+
+### 🏗️ Refactor
+
+* don't use debug lib directly ([#14969](https://github.com/puppeteer/puppeteer/issues/14969)) ([7cbebc6](https://github.com/puppeteer/puppeteer/commit/7cbebc6ea1d881ce6538a82014e73dd0e785e754))
+* remove deprecated Browser.isConnected() ([#14910](https://github.com/puppeteer/puppeteer/issues/14910)) ([f2cdffc](https://github.com/puppeteer/puppeteer/commit/f2cdffc4d4d6c965098666cdb79bb8a39de0ea0d))
+* remove deprecated MouseOptions.clickCount ([#13865](https://github.com/puppeteer/puppeteer/issues/13865)) ([1f6bd1f](https://github.com/puppeteer/puppeteer/commit/1f6bd1f98fc9090b632442538b066aa04368a87c))
+* remove deprecated Puppeteer.product ([#14977](https://github.com/puppeteer/puppeteer/issues/14977)) ([2b097b7](https://github.com/puppeteer/puppeteer/commit/2b097b714ebf2e0e61e71002194caacecbdcedf8))
+* return a Promise for executablePath, defaultArgs ([#14965](https://github.com/puppeteer/puppeteer/issues/14965)) ([74059fd](https://github.com/puppeteer/puppeteer/commit/74059fd3352b789df73cb297c56be6694b2200ab))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @puppeteer/browsers bumped from 2.13.2 to 3.0.0
+
+
+### 🛠️ Fixes
+
+* block standard network emulation reset if allowlist or blocklist are enabled ([#14976](https://github.com/puppeteer/puppeteer/issues/14976)) ([4e75b66](https://github.com/puppeteer/puppeteer/commit/4e75b66e333803960c77d88f9357fba411796f36))
+* Handle missing sessionId when looking up callbacks ([#14975](https://github.com/puppeteer/puppeteer/issues/14975)) ([4faa0e6](https://github.com/puppeteer/puppeteer/commit/4faa0e6ce9dd5db3ab41407c427de89d08ca20bd))
+* normalize newline-separated headers to comma-separated format ([#14492](https://github.com/puppeteer/puppeteer/issues/14492)) ([1ea5dea](https://github.com/puppeteer/puppeteer/commit/1ea5deabbcb6ea81095a3fef5dfd0f1b94d9df61))
+* **puppeteer-core:** Remove Cookie attribute sameParty ([#14545](https://github.com/puppeteer/puppeteer/issues/14545)) ([be2d86a](https://github.com/puppeteer/puppeteer/commit/be2d86a5659b8391ece6a4026582cf69716aae8c))
+* **webdriver:** don't store request on BrowsingContext ([#14966](https://github.com/puppeteer/puppeteer/issues/14966)) ([4e4daec](https://github.com/puppeteer/puppeteer/commit/4e4daec603f62f206a93019693d24ba7b93ad9d4))
+
+
+### ⚡ Performance
+
+* **webdriver:** remove intermediate object wrappers ([#14967](https://github.com/puppeteer/puppeteer/issues/14967)) ([c19b855](https://github.com/puppeteer/puppeteer/commit/c19b855390e94a6e571fa540c872e3351fec4e7d))
+
+
+## [24.43.1](https://github.com/puppeteer/puppeteer/compare/puppeteer-v24.43.0...puppeteer-v24.43.1) (2026-05-11)
+
+
+### ♻️ Chores
+
+* **puppeteer:** Synchronize puppeteer versions
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @puppeteer/browsers bumped from 2.13.1 to 2.13.2
+
+
+### 🛠️ Fixes
+
+* reject BiDi URL restrictions ([#14956](https://github.com/puppeteer/puppeteer/issues/14956)) ([b2140ae](https://github.com/puppeteer/puppeteer/commit/b2140ae75411bc5c9dc13d10e853372d9dbc9cb5))
+* remove networkidle options from setContent ([#14940](https://github.com/puppeteer/puppeteer/issues/14940)) ([54254e4](https://github.com/puppeteer/puppeteer/commit/54254e49668ecf2130e0e6b5ef8d25223264ce14))
+* roll to Firefox 150.0.2 ([#14946](https://github.com/puppeteer/puppeteer/issues/14946)) ([a588310](https://github.com/puppeteer/puppeteer/commit/a58831074136da60b3a8ea1c28be799d9027c830))
+
+
+### ⚡ Performance
+
+* dispose sub-classes correctly ([#14430](https://github.com/puppeteer/puppeteer/issues/14430)) ([e285ff2](https://github.com/puppeteer/puppeteer/commit/e285ff2dec00dd4f3e0b125a4f26c394ac369e72))
+* optimize url blocking on navigation ([#14945](https://github.com/puppeteer/puppeteer/issues/14945)) ([e4002a4](https://github.com/puppeteer/puppeteer/commit/e4002a4264626982a5228e72b07e2e47b0187189))
+
+
 ## [24.43.0](https://github.com/puppeteer/puppeteer/compare/puppeteer-v24.42.0...puppeteer-v24.43.0) (2026-05-06)
 
 

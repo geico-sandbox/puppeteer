@@ -1,5 +1,65 @@
 # Changelog
 
+## [3.0.2](https://github.com/puppeteer/puppeteer/compare/browsers-v3.0.1...browsers-v3.0.2) (2026-05-15)
+
+
+### 🛠️ Fixes
+
+* update docs text ([#14992](https://github.com/puppeteer/puppeteer/issues/14992)) ([36527b8](https://github.com/puppeteer/puppeteer/commit/36527b8b9dd856e11a372b46cba23409e5613573))
+
+## [3.0.1](https://github.com/puppeteer/puppeteer/compare/browsers-v3.0.0...browsers-v3.0.1) (2026-05-13)
+
+
+### 🛠️ Fixes
+
+* update browsers to trigger release ([#14984](https://github.com/puppeteer/puppeteer/issues/14984)) ([bf05fb9](https://github.com/puppeteer/puppeteer/commit/bf05fb9bf5bac997e365eda2e31c6067e5ec1677))
+
+## [3.0.0](https://github.com/puppeteer/puppeteer/compare/browsers-v2.13.2...browsers-v3.0.0) (2026-05-12)
+
+
+### ⚠ BREAKING CHANGES
+
+* bump min NodeJS to 22 ([#14973](https://github.com/puppeteer/puppeteer/issues/14973))
+* update min version - Node v20.19 and Typescript v5.0.1 ([#14364](https://github.com/puppeteer/puppeteer/issues/14364))
+* move packages to ESM only ([#14355](https://github.com/puppeteer/puppeteer/issues/14355))
+* make proxy agent optional peer dependency and update to v8 ([#14894](https://github.com/puppeteer/puppeteer/issues/14894))
+* remove public makeProgressCallback helper ([#13804](https://github.com/puppeteer/puppeteer/issues/13804))
+* replace extract-zip with OS tar.exe or unzip ([#14960](https://github.com/puppeteer/puppeteer/issues/14960))
+
+### 🎉 Features
+
+* **browsers:** add experimental bisect CLI command ([#14746](https://github.com/puppeteer/puppeteer/issues/14746)) ([512d693](https://github.com/puppeteer/puppeteer/commit/512d69375b5d4e61f59ddfa70674cb2f814c61fa))
+* move packages to ESM only ([#14355](https://github.com/puppeteer/puppeteer/issues/14355)) ([4c22177](https://github.com/puppeteer/puppeteer/commit/4c22177a7dcbd5a5fe6922eec75351bb56cd0336))
+
+
+### 🛠️ Fixes
+
+* remove public makeProgressCallback helper ([#13804](https://github.com/puppeteer/puppeteer/issues/13804)) ([0876ee1](https://github.com/puppeteer/puppeteer/commit/0876ee153008a0084839886f52b95e269c46578a))
+* replace extract-zip with OS tar.exe or unzip ([#14960](https://github.com/puppeteer/puppeteer/issues/14960)) ([55df174](https://github.com/puppeteer/puppeteer/commit/55df174d20bb8c3e8cce73d5d7ad8d1cfc9a560f))
+
+
+### 📄 Documentation
+
+* bump min NodeJS to 22 ([#14973](https://github.com/puppeteer/puppeteer/issues/14973)) ([4b6ddc3](https://github.com/puppeteer/puppeteer/commit/4b6ddc3a2631518651187b7795e36fae9a976121))
+* update min version - Node v20.19 and Typescript v5.0.1 ([#14364](https://github.com/puppeteer/puppeteer/issues/14364)) ([96f3780](https://github.com/puppeteer/puppeteer/commit/96f3780289d42557b648a18d806843a28da7e2f5))
+
+
+### ⚡ Performance
+
+* **browsers:** update logger signature ([#14968](https://github.com/puppeteer/puppeteer/issues/14968)) ([0f5a8d8](https://github.com/puppeteer/puppeteer/commit/0f5a8d85a0b531234758bcb8a7ff4371b2e0c960))
+
+
+### 🏗️ Refactor
+
+* make proxy agent optional peer dependency and update to v8 ([#14894](https://github.com/puppeteer/puppeteer/issues/14894)) ([501cccc](https://github.com/puppeteer/puppeteer/commit/501cccc18913f497561a0dbdbd8738c3e72fadbe))
+
+## [2.13.2](https://github.com/puppeteer/puppeteer/compare/browsers-v2.13.1...browsers-v2.13.2) (2026-05-11)
+
+
+### 🛠️ Fixes
+
+* do not use shell for setup.exe ([#14959](https://github.com/puppeteer/puppeteer/issues/14959)) ([d8b5fd9](https://github.com/puppeteer/puppeteer/commit/d8b5fd9f5fe035d5246890872c4c7a1d758fa6cf))
+
 ## [2.13.1](https://github.com/puppeteer/puppeteer/compare/browsers-v2.13.0...browsers-v2.13.1) (2026-05-06)
 
 
