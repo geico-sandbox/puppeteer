@@ -2,6 +2,30 @@
 
 Combined changelog for puppeteer and puppeteer-core.
 
+## [25.0.4](https://github.com/puppeteer/puppeteer/compare/puppeteer-v25.0.3...puppeteer-v25.0.4) (2026-05-18)
+
+### ♻️ Chores
+
+- **puppeteer:** Synchronize puppeteer versions
+
+### Dependencies
+
+- The following workspace dependencies were updated
+  - dependencies
+    - puppeteer-core bumped from 25.0.3 to 25.0.4
+
+### 🛠️ Fixes
+
+- Throw TargetCloseError when session ID not found ([#15002](https://github.com/puppeteer/puppeteer/issues/15002)) ([611abef](https://github.com/puppeteer/puppeteer/commit/611abef6c4efd1852947025ac2eb141d99d991b4))
+
+## [25.0.3](https://github.com/puppeteer/puppeteer/compare/puppeteer-v25.0.2...puppeteer-v25.0.3) (2026-05-18)
+
+### Dependencies
+
+- The following workspace dependencies were updated
+  - dependencies
+    - @puppeteer/browsers bumped from 3.0.2 to 3.0.3
+
 ## [25.0.2](https://github.com/puppeteer/puppeteer/compare/puppeteer-v25.0.1...puppeteer-v25.0.2) (2026-05-15)
 
 ### ♻️ Chores

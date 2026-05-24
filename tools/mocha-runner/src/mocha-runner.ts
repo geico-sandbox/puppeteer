@@ -8,11 +8,10 @@
 
 import {spawn} from 'node:child_process';
 import {randomUUID} from 'node:crypto';
-import fs from 'node:fs';
+import fs, {globSync} from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 
-import {globSync} from 'glob';
 import yargs from 'yargs';
 import {hideBin} from 'yargs/helpers';
 
@@ -153,7 +152,7 @@ async function main() {
       // https://docs.github.com/en/actions/learn-github-actions/variables#default-environment-variables
       const githubActionDebugging = process.env['RUNNER_DEBUG']
         ? {
-            DEBUG: 'puppeteer:*',
+            NODE_DEBUG: 'puppeteer:*',
             EXTRA_LAUNCH_OPTIONS: JSON.stringify({
               dumpio: true,
               extraPrefsFirefox: {
@@ -204,7 +203,11 @@ async function main() {
 
       const specPattern = 'test/build/**/*.spec.js';
       const specs = globSync(specPattern, {
-        ignore: !includeCdpTests ? 'test/build/cdp/**/*.spec.js' : undefined,
+        exclude: !includeCdpTests
+          ? (file: string) => {
+              return file.includes('test/build/cdp/');
+            }
+          : undefined,
       }).sort((a, b) => {
         return a.localeCompare(b);
       });
