@@ -593,6 +593,15 @@ Emulates the idle state. If no arguments set, clears idle state emulation.
 </td></tr>
 <tr><td>
 
+<span id="emulatelocale">[emulateLocale(locale)](./puppeteer.page.emulatelocale.md)</span>
+
+</td><td>
+
+</td><td>
+
+</td></tr>
+<tr><td>
+
 <span id="emulatemediafeatures">[emulateMediaFeatures(features)](./puppeteer.page.emulatemediafeatures.md)</span>
 
 </td><td>
@@ -1338,7 +1347,7 @@ A target this page was created from.
 
 **Deprecated:**
 
-Use [Page.createCDPSession()](./puppeteer.page.createcdpsession.md) directly.
+To create CDP session use [Page.createCDPSession()](./puppeteer.page.createcdpsession.md) directly. To identify pages spawned by this one, use [PageEvent.Popup](./puppeteer.pageevent.md) event instead.
 
 </td></tr>
 <tr><td>

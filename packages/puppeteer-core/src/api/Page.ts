@@ -910,7 +910,8 @@ export abstract class Page extends EventEmitter<PageEvents> {
   /**
    * A target this page was created from.
    *
-   * @deprecated Use {@link Page.createCDPSession} directly.
+   * @deprecated To create CDP session use {@link Page.createCDPSession} directly. To
+   * identify pages spawned by this one, use {@link PageEvent.Popup} event instead.
    */
   abstract target(): Target;
 
@@ -2219,6 +2220,12 @@ export abstract class Page extends EventEmitter<PageEvents> {
    * ```
    */
   abstract emulateMediaFeatures(features?: MediaFeature[]): Promise<void>;
+
+  /**
+   * @param locale - Locale to emulate on the page. Passing no locale disables
+   * locale emulation.
+   */
+  abstract emulateLocale(locale?: string): Promise<void>;
 
   /**
    * @param timezoneId - Changes the timezone of the page. See
